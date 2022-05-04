@@ -45,7 +45,7 @@ export default function Create() {
         }
 
         //Send request to createroom
-        if (process.env.NODE_ENV == "development") {
+        if (true) {
             const res = await axios.get("http://localhost:3001/api/createRoom", {
                 params: {
                     username: username,

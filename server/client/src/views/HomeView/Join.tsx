@@ -55,7 +55,7 @@ export default function Join() {
             return
         }
 
-        if (process.env.NODE_ENV == "development") {
+        if (true) {
             const res = await axios.get("http://localhost:3001/api/joinRoom", {
                 params: {
                     roomCode,

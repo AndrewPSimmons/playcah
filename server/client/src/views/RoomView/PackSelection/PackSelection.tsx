@@ -74,7 +74,7 @@ export default function PackSelection({ socket }: any) {
           }
         </div>
 }
-  <div>{JSON.stringify(state.room)}</div>
+  {/* <div>{JSON.stringify(state.room)}</div> */}
     </div>
   )
 }

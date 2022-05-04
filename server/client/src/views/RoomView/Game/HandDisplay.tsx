@@ -157,7 +157,7 @@ export default function HandDisplay({ socket }: any) {
                         <button className='bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded' onClick={() => { setGettingBlank(false) }}>Cancel</button>
                         <input className='border-2 border-black m-2 w-full' type="text" value={blankCardText} onChange={(e) => setBlankCardText(e.target.value)} />
                     </div>}
-                    <div>{JSON.stringify(selected)}</div>
+                    {/* <div>{JSON.stringify(selected)}</div> */}
                 </div>}
         </div>
     )

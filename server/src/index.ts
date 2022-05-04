@@ -1,4 +1,5 @@
 import express, { Express, query, Request, Response } from "express";
+import path from "path";
 import DB from "./db";
 import dotenv from 'dotenv';
 const cors = require("cors");
@@ -19,13 +20,24 @@ const io = new Server(SOCKET_PORT, {
 dotenv.config();
 
 const app = express();
-app.use(cors())
-app.get('/', async (req: Request, res: Response) => {
-  res.send('Express + TypeScript Serveee!');
-});
+const client_urls = ["/room", "/room/*"]
+app.get("/", (req, res) => {
+  //res.send(path.join(__dirname, "..", "client", "build", "index.html"))
+  res.sendFile(path.join(__dirname, "..", "client", "build", "index.html"));
+ });
 
+ client_urls.forEach((url) => {
+  app.use(url, express.static(path.join(__dirname, '../client/build')))
+})
+
+app.use(cors())
+app.use(express.static(path.join(__dirname, "../client/build")))
+// app.use("/static/js", express.static(path.join(__dirname, "../client/build/static/js")))
+// app.use("/static/css", express.static(path.join(__dirname, "../client/build/static/css")))
+// app.use("/maifest.json", express.static(path.join(__dirname, "../client/build/manifest.json")))
 
 app.get("/api/createRoom", async (req: Request, res: Response) => {
+  console.log("creating")
   const response: any = {}
   const { username, password } = Object(req.query)
 
