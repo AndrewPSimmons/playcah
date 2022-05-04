@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from "react"
 import { useDispatch } from "react-redux"
-import { userNewId } from "../../redux/actions/userActions"
+import { userInit, userNewId } from "../../redux/actions/userActions"
 import axios from "axios"
+import { roomInit } from "../../redux/actions/roomActions"
+import { useNavigate } from "react-router-dom"
 const validateUsername = (username: string) => {
     let error = {
         error: false,
@@ -36,9 +38,9 @@ export default function Join() {
     const [roomCode, set_roomCode] = useState("")
     const [password, set_password] = useState("")
     const dispatch = useDispatch()
+    const navigate = useNavigate()
 
-
-    const joinRoom = (roomCode: string, username: string, password: string) => {
+    const joinRoom = async (roomCode: string, username: string, password: string) => {
         setCreating(true)
         const roomCodeErrors = validateRoomCode(roomCode)
         const usernameErrors = validateUsername(username)
@@ -52,7 +54,33 @@ export default function Join() {
             setCreating(false)
             return
         }
-        console.log(username, password);
+
+        if (process.env.NODE_ENV == "development") {
+            const res = await axios.get("http://localhost:3001/api/joinRoom", {
+                params: {
+                    roomCode,
+                    username: username,
+                    password: password
+                }
+            })
+            console.log(res.data);
+            if (res.data.error) {
+                setCreating(false)
+                alert(res.data.message)
+                return
+            }
+            console.log(res);
+            //No error means the room was created... we need to do a few things
+            const newUser = res.data.data.newUser
+            const room = res.data.data.room
+            dispatch(userInit(newUser._id, newUser.username, false, res.data.data.roomCode))
+            //dispatch(roomInit(room._id, room.members))
+            
+            navigate("/room", {replace: true})  
+            // navigate("/room", {replace: true})  
+        }
+        console.log(roomCode, username, password);
+        
     }
     return (
         <div id="join" className="flex flex-col">

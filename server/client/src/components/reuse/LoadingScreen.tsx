@@ -2,6 +2,6 @@ import React from 'react'
 
 export default function LoadingScreen() {
   return (
-    <div>LoadingScreen</div>
+    <div className='w-screen h-screen bg-orange-50'>LoadingScreen</div>
   )
 }

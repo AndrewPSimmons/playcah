@@ -9,7 +9,11 @@ const userReducer = (state = initialState.user, { type, payload }: any) => {
       
     case actionTypes.USER_NEW_ID:
       return { ...state, ...payload }
-
+    
+    
+      case actionTypes.SET_NULL:
+    case actionTypes.USER_SET_NULL:
+      return {...initialState.user}
     default:
       return state
   }

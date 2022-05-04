@@ -28,6 +28,7 @@ export default function HomeView() {
         const state = JSON.parse(sessionStorage.getItem("state") || "{}")
         if (state.room.roomCode && state.room.roomCode !== null) {
           const doRedirect = await axios.get("http://localhost:3001/api/validRoomCode", { params: { roomCode: state.room.roomCode } })
+          console.log("Here is room code ??", state.room.roomCode);
           if (doRedirect) { navigate("/room") }
         }
       }

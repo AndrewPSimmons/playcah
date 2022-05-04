@@ -12,10 +12,10 @@ function App() {
   const store = useSelector(state=>state)
   return (
     <Router>
-      {JSON.stringify(store)}
+      {/*JSON.stringify(store)*/}
         <Routes>
           {routes.map(route => {
-            return <Route path={route.path} element={<route.component />} />
+            return <Route key={route.path} path={route.path} element={<route.component />} />
           })}
         </Routes>
     </Router>

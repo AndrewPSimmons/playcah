@@ -60,10 +60,11 @@ export default function Create() {
             }
             //No error means the room was created... we need to do a few things
             const newUser = res.data.data.newUser
+            console.log("new user", newUser);
             const newRoom = res.data.data.newRoom
-            dispatch(userInit(newUser._id, newUser.username))
-            dispatch(roomInit(newRoom._id))
-            navigate("/room", {replace: true})
+            dispatch(userInit(newUser._id, newUser.username, true, res.data.data.roomCode))
+            //dispatch(roomInit(newRoom._id, newRoom.members))
+            navigate("/room", {replace: true})  
         }
     }
 

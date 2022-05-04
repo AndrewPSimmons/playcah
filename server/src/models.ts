@@ -2,7 +2,8 @@ import mongoose from "mongoose"
 const userSchema = new mongoose.Schema({
     _id: String,
     username: String,
-    socket_id: String
+    socket_id: String,
+    roomCode: String
 }, { timestamps: true })
 
 export const User = mongoose.model("User", userSchema)
@@ -10,10 +11,14 @@ export const User = mongoose.model("User", userSchema)
 const roomSchema = new mongoose.Schema({
     _id: String,
     host: String,
-    current_game_id: String,
     with_password: Boolean,
     password: String,
-    members: [{ user_id: String, username: String, is_host: Boolean }],
+    members: [{ _id: String, username: String, is_host: Boolean }],
+    packs: Array,
+    gameSettings: Object,
+    roomSettings: Object,
+    inGame: Boolean,
+    gameID: String,
     settings: { game_settings: Object, room_settings: Object }
     // {
     //     mute_nonplayers: Boolean,
@@ -24,25 +29,43 @@ const roomSchema = new mongoose.Schema({
     // }
 })
 export const Room = mongoose.model("Room", roomSchema)
+/*
 
+[1]     handLimit: 6,
+[1]     useBlankCards: true,
+[1]     blankCardCount: 6,
+[1]     victoryLimit: 13,
+[1]     blackCardOnlyPickOne: true */
 const gameSchema = new mongoose.Schema({
     _id: String,
-    judge_user_id: String,
-    game_state: String,
-    hand_limit: Number,
+    roomCode: String,
+    settings: Object,
+    // {
+    //     handLimit: Number,
+    //     useBlankCards: Boolean,
+    //     blankCardCount: Number,
+    //     victoryLimit: Number,
+    //     blackCardOnlyPickOne: Boolean,
+    // },
     round: Number,
-    cards_on_table: Array,
-    black_card: Object,
-    blank_card_limit: Number,
-    is_blank_cards: Boolean,
-    score_board: Object,
-    hands: Object,
-    deck_size: Number,
-    white_cards: Array,
-    used_white_cards: [String], //Array of used white card ids
-    used_black_cards: [String], //Array of used black card ids
-    players: [{ user_id: String, username: String, is_host: Boolean, score: Number }],
-    packs: [String],
+    gameState: String,
+    judgeId: String,
+    blackCard: Object, //BCardType
+    players: [Object], //This will be an array of objects
+    /*Players contains 
+        Hands
+        Score
+    */
+    submittedCards: Array,
+    //Card Info
+    WCardCount: Number,
+    BCardCount: Number,
+    whiteCards: Array,
+    usedWhiteCards: [Number], //Array of used white card ids
+    usedBlackCards: [Number], //Array of used black card ids
+    packs: [Object],
+    packIDArray: [Number],
+    log: [Object]
     //settings: Object //Leaving undefined unti I know all that has to go into the settings
     /* 
     settings: {
@@ -57,13 +80,17 @@ export const Game = mongoose.model("Game", gameSchema)
 
 const packSchema = new mongoose.Schema({
     _id: String,
+    name: String,
     white: Array,
     black: Array,
     official: Boolean,
-    pack_id: Number
+    pack_id: Number,
+    card_count: Number,
+    white_card_count: Number,
+    black_card_count: Number
 
 })
-const Pack = mongoose.model("Pack", packSchema)
+export const Pack = mongoose.model("Pack", packSchema)
 const black_cardSchema = new mongoose.Schema({
 
 })

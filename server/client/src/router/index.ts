@@ -10,7 +10,7 @@ const routes = [
     buildRoute("*", NotFoundView),
     buildRoute("/", HomeView),
     buildRoute("/room", RoomView),
-    buildRoute("/join/:roomCode", JoinRoomView)
+    buildRoute("/room/:roomCode", JoinRoomView)
 ]
 
 export default routes
