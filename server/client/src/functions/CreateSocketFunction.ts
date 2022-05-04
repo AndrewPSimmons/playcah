@@ -13,7 +13,8 @@ import { gameNewData, gameSetNull } from '../redux/actions/gameActions'
 
 const state: stateType = store.getState()
 const CreateSocket = (userId: string, roomCode: string) => {
-    const s = io("http://localhost:3002", {
+    let urlBase = process.env.NODE_ENV == "development" ? "locahost:3002" : "playcah.com"
+    const s = io("http://"+urlBase+":3002", {
         query: {
             userId,
             roomCode

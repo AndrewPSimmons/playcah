@@ -21,7 +21,7 @@ export default function PackSelection({ socket }: any) {
       } else {
         urlBase = "playcah.com"
       }
-      const packs = await axios.get(`http://" + urlBase +"/api/getPackMeta`)
+      const packs = await axios.get("http://" + urlBase +"/api/getPackMeta")
       setPacks(packs.data)
       setFullPacks(packs.data)
     }

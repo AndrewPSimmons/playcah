@@ -7,6 +7,7 @@ import { Socket, Server } from "socket.io"
 import { drawPlayerNewCards, filterGameDataForPlayer, gameEnd, getGameData, socketRoomEmit, updateGameData, updateRoomData, userLeave, validateUsername } from "./functions";
 import { BCardType, BlankWCardType, GamePlayerType, GameSettingsType, GameType, PackNoCardsType, PackWithCardsType, RoomMemberType, RoomType, SubmittedCardObject, UserType, WCardType } from "./types";
 import { Document } from "mongoose"
+const fs = require('fs')
 const APP_PORT = 3001
 const SOCKET_PORT = 3002
 const ROOM_CODE_LENGTH = 4
@@ -20,6 +21,15 @@ const io = new Server(SOCKET_PORT, {
 dotenv.config();
 
 const app = express();
+app.get("/.well-known/pki-validation", async (req:Request, res:Response) => {
+  fs.readFile(path.join(__dirname, '6D47F73B3DAA2C4244DB6A2D392BDEC5.txt'), 'utf8', (err:Error, data:any) => {
+    if (err) {
+      throw err;
+    }
+    res.send(data)
+  })
+})
+
 const client_urls = ["/room", "/room/*"]
 app.get("/", (req, res) => {
   //res.send(path.join(__dirname, "..", "client", "build", "index.html"))
