@@ -99,7 +99,7 @@ export default CreateSocket
 
 //     const validUser = async () => {
 //         const id = store.user._id
-//         const res = await axios.get("http://localhost:3001/api/validUser", { params: { id } })
+//         const res = await axios.get("http://" + urlBase +"/api/validUser", { params: { id } })
 //         return res.data
 //     }
 //     useEffect(() => {

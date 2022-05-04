@@ -45,8 +45,14 @@ export default function Create() {
         }
 
         //Send request to createroom
+        let urlBase = ""
+        if(process.env.NODE_ENV == "development"){
+            urlBase = "" + urlBase +""
+        }else {
+            urlBase = "playcah.com"
+        }
         if (true) {
-            const res = await axios.get("http://localhost:3001/api/createRoom", {
+            const res = await axios.get("http://" + urlBase +"/api/createRoom", {
                 params: {
                     username: username,
                     password: password

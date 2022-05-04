@@ -9,7 +9,7 @@ const validateUsername = (username: string) => {
         error: false,
         messages: [""]
     }
-    if(username.length == 0){
+    if (username.length == 0) {
         error.error = true
         error.messages.push("Username Empty")
     }
@@ -24,7 +24,7 @@ const validateRoomCode = (roomCode: string) => {
         error: false,
         messages: [""]
     }
-    if(roomCode.length == 0){
+    if (roomCode.length == 0) {
         error.error = true
         error.messages.push("Room Code Empty")
     }
@@ -44,7 +44,7 @@ export default function Join() {
         setCreating(true)
         const roomCodeErrors = validateRoomCode(roomCode)
         const usernameErrors = validateUsername(username)
-        if(roomCodeErrors.error){
+        if (roomCodeErrors.error) {
             alert(roomCodeErrors.messages.join("\n"))
             setCreating(false)
             return
@@ -56,7 +56,13 @@ export default function Join() {
         }
 
         if (true) {
-            const res = await axios.get("http://localhost:3001/api/joinRoom", {
+            let urlBase = ""
+            if (process.env.NODE_ENV == "development") {
+                urlBase = "localhost:3001"
+            } else {
+                urlBase = "playcah.com"
+            }
+            const res = await axios.get("http://" + urlBase + "/api/joinRoom", {
                 params: {
                     roomCode,
                     username: username,
@@ -75,12 +81,12 @@ export default function Join() {
             const room = res.data.data.room
             dispatch(userInit(newUser._id, newUser.username, false, res.data.data.roomCode))
             //dispatch(roomInit(room._id, room.members))
-            
-            navigate("/room", {replace: true})  
+
+            navigate("/room", { replace: true })
             // navigate("/room", {replace: true})  
         }
         console.log(roomCode, username, password);
-        
+
     }
     return (
         <div id="join" className="flex flex-col">
@@ -88,19 +94,19 @@ export default function Join() {
                 <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="roomCode">
                     Room Code
                 </label>
-                <input autoComplete="off" className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="roomCode" type="text" onChange={(e) => set_roomCode(e.target.value)} placeholder="required"/>
+                <input autoComplete="off" className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="roomCode" type="text" onChange={(e) => set_roomCode(e.target.value)} placeholder="required" />
             </div>
             <div className="mb-4">
                 <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="username">
                     Username
                 </label>
-                <input autoComplete="off" className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="username" type="text" onChange={(e) => set_username(e.target.value)}placeholder="required" />
+                <input autoComplete="off" className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="username" type="text" onChange={(e) => set_username(e.target.value)} placeholder="required" />
             </div>
             <div className="mb-4">
                 <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="password">
                     Password
                 </label>
-                <input autoComplete="off" className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="password" type="password" onChange={(e) => set_password(e.target.value)} placeholder="optional"/>
+                <input autoComplete="off" className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="password" type="password" onChange={(e) => set_password(e.target.value)} placeholder="optional" />
             </div>
 
             <button className={(creating ? "bg-green-600" : "bg-green-500 ") + " hover:bg-green-600 text-white font-bold py-2 px-4 rounded"} disabled={creating} onClick={() => joinRoom(roomCode, username, password)}>

@@ -29,7 +29,13 @@ export default function RoomView() {
   //Socket init effect
   useEffect(() => {
     async function validateSocket(userId: string) {
-      const userCheck = await axios.get("http://localhost:3001/api/validUser", { params: { id: userId } })
+      let urlBase = ""
+      if (process.env.NODE_ENV == "development") {
+        urlBase = "localhost:3001"
+      } else {
+        urlBase = "playcah.com"
+      }
+      const userCheck = await axios.get("http://" + urlBase + "/api/validUser", { params: { id: userId } })
       if (!userCheck.data) {
         setSocket(null)
         return
@@ -51,7 +57,7 @@ export default function RoomView() {
   }
   if (socket === null) {
     console.log("doing redirect 2", socket);
-    navigate("/", {replace: true})
+    navigate("/", { replace: true })
     return <div>
       <Navigate to={"/"} />
       <LoadingScreen />
@@ -62,22 +68,22 @@ export default function RoomView() {
   return (
     <div className='flex flex-col bg-orange-50 p-2 h-screen justify-between overflow-x-scroll'>
       <div className='h-[3%] flex'>
-        <RoomButtons classes="" socket={socket} />  {state.room.inGame ? <GameButtons socket={socket}/> : null} 
+        <RoomButtons classes="" socket={socket} />  {state.room.inGame ? <GameButtons socket={socket} /> : null}
       </div>
       {/* {JSON.stringify(state)} */}
-      {state.room.inGame 
-      ? socket && <Game classes="" socket={socket}/>
-      : <div className='h-[72%] flex justify-between'>
-        {/* <Game /> */}
-        <PackSelection socket={socket}/>
-        {state.room.gameSettings && <GameSettings socket={socket}/>}
-        {state.room.roomSettings && <RoomSettings socket={socket}/>}
+      {state.room.inGame
+        ? socket && <Game classes="" socket={socket} />
+        : <div className='h-[72%] flex justify-between'>
+          {/* <Game /> */}
+          <PackSelection socket={socket} />
+          {state.room.gameSettings && <GameSettings socket={socket} />}
+          {state.room.roomSettings && <RoomSettings socket={socket} />}
 
-      </div>
-       }
+        </div>
+      }
       <div className='flex justify-between h-[25%]'>
         <MemberDisplay classes="" />
-        {!state.room.inGame && state.user.isHost && <StartGame socket={socket}/>}
+        {!state.room.inGame && state.user.isHost && <StartGame socket={socket} />}
         <ChatBox classes="" socket={socket} />
       </div>
     </div>

@@ -27,7 +27,13 @@ export default function HomeView() {
       if (sessionStorage.getItem("state")) {
         const state = JSON.parse(sessionStorage.getItem("state") || "{}")
         if (state.room.roomCode && state.room.roomCode !== null) {
-          const doRedirect = await axios.get("http://localhost:3001/api/validRoomCode", { params: { roomCode: state.room.roomCode } })
+          let urlBase = ""
+        if(process.env.NODE_ENV == "development"){
+            urlBase = "" + urlBase +""
+        }else {
+            urlBase = "playcah.com"
+        }
+          const doRedirect = await axios.get("http://" + urlBase +"/api/validRoomCode", { params: { roomCode: state.room.roomCode } })
           console.log("Here is room code ??", state.room.roomCode);
           if (doRedirect) { navigate("/room") }
         }

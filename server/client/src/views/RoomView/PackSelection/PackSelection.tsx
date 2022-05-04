@@ -15,7 +15,13 @@ export default function PackSelection({ socket }: any) {
   const state: stateType = useSelector((store: stateType) => store)
   useEffect(() => {
     const asyncEffect = async () => {
-      const packs = await axios.get(`http://localhost:3001/api/getPackMeta`)
+      let urlBase = ""
+      if (process.env.NODE_ENV == "development") {
+        urlBase = "localhost:3001"
+      } else {
+        urlBase = "playcah.com"
+      }
+      const packs = await axios.get(`http://" + urlBase +"/api/getPackMeta`)
       setPacks(packs.data)
       setFullPacks(packs.data)
     }
@@ -48,8 +54,8 @@ export default function PackSelection({ socket }: any) {
         <input className='w-auto' type="text" onChange={(e) => { setSearchText(e.target.value) }} placeholder="search" />
       </div> : <h3>Packs</h3>}
 
-      {searching ? 
-      <div>Searching</div> :
+      {searching ?
+        <div>Searching</div> :
         <div className='h-full py-1 overflow-scroll pb-16'>
           {
             state.user.isHost ?
@@ -66,15 +72,15 @@ export default function PackSelection({ socket }: any) {
                 if (onlyOfficial && !filteredPack.official) {
                   return
                 }
-                return <PackSelectionDisplayItem key={i} pack={filteredPack}/>
+                return <PackSelectionDisplayItem key={i} pack={filteredPack} />
 
 
               })
 
           }
         </div>
-}
-  {/* <div>{JSON.stringify(state.room)}</div> */}
+      }
+      {/* <div>{JSON.stringify(state.room)}</div> */}
     </div>
   )
 }

@@ -45,11 +45,17 @@ export default function JoinRoomView() {
     async function getRoomCode() {
       const locationSplit = location.pathname.split("/")
       const [userIdToJoin] = locationSplit.slice(-1)
-      const res = await axios.get("http://localhost:3001/api/roomCodeFromUser", {
+      let urlBase = ""
+      if (process.env.NODE_ENV == "development") {
+        urlBase = "localhost:3001"
+      } else {
+        urlBase = "playcah.com"
+      }
+      const res = await axios.get("http://" + urlBase + "/api/roomCodeFromUser", {
         params: { userId: userIdToJoin }
       })
       console.log(res.data);
-      if(res.data === null){
+      if (res.data === null) {
         setRoomCode(null)
         return
       }
@@ -74,7 +80,13 @@ export default function JoinRoomView() {
     }
 
     if (process.env.NODE_ENV == "development") {
-      const res = await axios.get("http://localhost:3001/api/joinRoom", {
+      let urlBase = ""
+      if (process.env.NODE_ENV == "development") {
+        urlBase = "localhost:3001"
+      } else {
+        urlBase = "playcah.com"
+      }
+      const res = await axios.get("http://" + urlBase + "/api/joinRoom", {
         params: {
           roomCode,
           username: username,
@@ -100,17 +112,17 @@ export default function JoinRoomView() {
     console.log(roomCode, username, password);
 
   }
-  if(roomCode === undefined){
-    return <LoadingScreen/>
+  if (roomCode === undefined) {
+    return <LoadingScreen />
   }
-  if(roomCode === null){
+  if (roomCode === null) {
     return <div>Bad Invite Link</div>
   }
   return (
     <div className='flex items-center justify-center'>
       <div id="join" className="flex flex-col items-center">
 
-        <div onClick={()=>setShouldHide(!shouldHide)} onMouseOut={()=>setShouldHide(true)} className="px-5"> 
+        <div onClick={() => setShouldHide(!shouldHide)} onMouseOut={() => setShouldHide(true)} className="px-5">
           <h1 className='text-3xl pt-12 pb-4'>Room: {shouldHide ? 'Click to Show' : roomCode}</h1>
         </div>
         <div className="mb-4">
