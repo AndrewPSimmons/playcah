@@ -21,8 +21,9 @@ const io = new Server(SOCKET_PORT, {
 dotenv.config();
 
 const app = express();
-app.get("/.well-known/pki-validation", async (req:Request, res:Response) => {
-  fs.readFile(path.join(__dirname, '6D47F73B3DAA2C4244DB6A2D392BDEC5.txt'), 'utf8', (err:Error, data:any) => {
+const textFileName = "6D47F73B3DAA2C4244DB6A2D392BDEC5.txt"
+app.get("/.well-known/pki-validation/"+textFileName, async (req:Request, res:Response) => {
+  fs.readFile(path.join(__dirname, "..", "public", textFileName), 'utf8', (err:Error, data:any) => {
     if (err) {
       throw err;
     }
